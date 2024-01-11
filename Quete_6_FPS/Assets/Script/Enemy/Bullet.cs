@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -11,7 +12,15 @@ public class Bullet : MonoBehaviour
         if (hitTransform.CompareTag("Player"))
         {
             hitTransform.GetComponent<PlayerHealth>().TakeDamage(10);
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
+    }
+
+    private void Update()
+    {
+        if (gameObject != null)
+        {
+            Destroy(gameObject, 10.0f);
+        }
     }
 }

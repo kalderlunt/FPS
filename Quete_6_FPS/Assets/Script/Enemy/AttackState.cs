@@ -41,6 +41,8 @@ public class AttackState : BaseState
                 enemy.Agent.SetDestination(enemy.transform.position + (Random.insideUnitSphere * 5));
                 _moveTimer = 0.0f;
             }
+
+            enemy.LastKnowPos = enemy.Player.transform.position;
         }
         else // lost sight of player 
         {
@@ -48,7 +50,7 @@ public class AttackState : BaseState
             if (_losePlayerTimer > 8.0f) // 8.0f is 8sec time before change to PatrolState
             {
                 // change to the search state
-                stateMachine.ChangeState(new PatrolState());
+                stateMachine.ChangeState(new SearchState());
             }
         }
     }
@@ -59,11 +61,11 @@ public class AttackState : BaseState
         Transform gunbarrel = enemy.gunBarrel;
 
         // instantiate a new bullet
-        GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/Bullet") as GameObject, gunbarrel.position, Quaternion.identity);
+        GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/Projectiles/FarmerHat_LOD0") as GameObject, gunbarrel.position, Quaternion.identity);
         // calculate the direction to the player
         Vector3 shootDirection = (enemy.Player.transform.position - gunbarrel.transform.position).normalized;
         // add force rigidbody of the bullet
-        bullet.GetComponent<Rigidbody>().velocity = shootDirection * 10;
+        bullet.GetComponent<Rigidbody>().velocity = shootDirection * 40;
         Debug.Log("Shoot");
         _shotTimer = 0.0f;
     }
