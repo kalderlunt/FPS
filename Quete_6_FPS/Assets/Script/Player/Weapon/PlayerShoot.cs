@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -12,6 +8,14 @@ public class PlayerShoot : MonoBehaviour
 
     [Header("WeaponValues")]
     public Transform gunBarrel;
+
+    [Range(0.000001f, 1.0f)] public float fireRate = 2.0f;
+    private float _shotTimer;
+
+    private void Start()
+    {
+
+    }
 
     private void InstantiateRb(GameObject bullet)
     {
@@ -23,9 +27,12 @@ public class PlayerShoot : MonoBehaviour
                 {
                     if (bullet.GetComponent<Rigidbody>().collisionDetectionMode == CollisionDetectionMode.Continuous)
                     {
-                        // kawaboumga BOOOM
-                        bullet.GetComponent<Rigidbody>().velocity = transform.TransformDirection(Vector3.forward * force);
 
+                        // kawaboumga BOOOM
+                        Vector3 shootDirection = -gunBarrel.forward;
+                        bullet.GetComponent<Rigidbody>().velocity = shootDirection * force;
+
+                        _shotTimer = 0.0f;
                     }
                     else
                     {
@@ -55,7 +62,7 @@ public class PlayerShoot : MonoBehaviour
     private void Shoot()
     {
         GameObject bullet = Instantiate(projectil, gunBarrel.position, Quaternion.identity) as GameObject;
-        
+
         bullet.transform.parent = GameObject.Find("BulletsParent").transform;
 
         if (bullet.GetComponent<Rigidbody>())
@@ -71,9 +78,19 @@ public class PlayerShoot : MonoBehaviour
 
     void Update()
     {
+        _shotTimer += Time.deltaTime;
+
         if (Input.GetMouseButton(0))
         {
-            Shoot();
+            if (_shotTimer > fireRate)
+            {
+                Shoot();
+            }
+        }
+        
+        if (Input.GetMouseButtonUp(0))
+        {
+            _shotTimer = 0.0f;
         }
     }
 }

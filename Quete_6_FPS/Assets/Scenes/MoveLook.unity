@@ -6794,6 +6794,7 @@ MonoBehaviour:
   projectil: {fileID: 411635546677250417, guid: b548d83547764ff49a2a408f5ec5fdd9, type: 3}
   force: 10
   gunBarrel: {fileID: 208496666}
+  fireRate: 0.2
 --- !u!1 &6788727228811212176
 GameObject:
   m_ObjectHideFlags: 0
